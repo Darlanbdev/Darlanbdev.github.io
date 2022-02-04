@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sodexo e-SDK</title>
+  </head>
+  <body>
+	<div id="div-hosted-tokenization"></div>
+		<button onclick="submitForm()">submit</button>
+  </body>
+  <script src="https://payment.preprod.direct.ingenico.com/hostedtokenization/js/client/tokenizer.min.js"></script> 
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script> 
+  <script> 
+
+    let params = (new URL(document.location)).searchParams;
+    let urlId = params.get("id");
+    console.log("id --")
+    console.log(urlId)
+    let hostedTokenizationPageUrl = "https://payment.preprod.direct.ingenico.com/hostedtokenization/tokenization/form/" + urlId
+    console.log(hostedTokenizationPageUrl)
+    var tokenizer = new Tokenizer(hostedTokenizationPageUrl, 'div-hosted-tokenization', { hideCardholderName: false });
+
+    tokenizer.initialize().then(() => {
+    // Do work after initialization, if any
+    })
+    .catch(reason => {
+    // Handle iFrame load error
+    })
+    function submitForm(){ // 
+        tokenizer.submitTokenization().then((result) => {
+            if (result.success) {
+                window.location.replace("http://sodexo-esdk.com/?result=success");
+            } else {
+                window.location.replace("http://sodexo-esdk.com/?result=error");
+            }
+        });
+    }
+  </script>
+</html>
